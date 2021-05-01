@@ -9,6 +9,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jmp.jweb.service.BoardService;
 import jmp.jweb.vo.BoardVo;
+import jmp.jweb.vo.Criteria;
 import lombok.extern.log4j.Log4j;
 
 @Controller
@@ -18,12 +19,20 @@ public class BoardController {
 	@Autowired
 	BoardService service;
 	
+	//리플
+	@GetMapping("/reply")
+	public String replyy() {
+		return "/board/reply";
+	}
+	
 	//전체리스트
 	@GetMapping("/board/list")
-	public void list(Model model) {
+	public String list(Model model) {
 		model.addAttribute("list", service.getList());
 		
 		log.info("getList();===================");
+		
+		return "/board/list_b";
 	}
 	
 	//등록페이지
@@ -44,12 +53,14 @@ public class BoardController {
 	}
 	
 	//상세정보조회
-	@GetMapping({"/board/get","/board/edit"})
-	public void get(BoardVo vo, Model model) {
+	@GetMapping("/board/get")//({"/board/get","/board/edit"})
+	public String get(Criteria cri, BoardVo vo, Model model) {
 		
 		vo = service.get(vo.getBnum());
 		
 		model.addAttribute("vo", vo);
+		
+		return "/board/get_b";
 	}
 
 	//에딛
@@ -67,6 +78,19 @@ public class BoardController {
 		rttr.addAttribute("bnum", vo.getBnum());
 		rttr.addFlashAttribute("resMsg", resMsg);
 		return "redirect:/board/get";
+	}
+	
+	@GetMapping("/board/edit")
+	public String edit(Criteria cri,BoardVo vo ,Model model) {
+		//상세정보조회
+		vo = service.get(vo.getBnum());
+		
+		//모델에 담아서 화면에 전달
+		model.addAttribute("vo", vo);
+		
+		//리턴이없으므로 /board/get(URL)로 페이지연결
+		
+		return "/board/edit_b";
 	}
 	
 	//삭제

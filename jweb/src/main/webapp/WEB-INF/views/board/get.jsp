@@ -35,6 +35,10 @@ if('${resMsg }' != ""){
 	</table>
 		<button type="button" onClick="location.href='/board/edit?bnum=${vo.bnum }'">수정</button>
 		<button type="button" onClick="location.href='/board/delete?bnum=${vo.bnum }'">삭제</button>
+		
+		
 </form>
+<!-- 댓글  -->
+									<jsp:include page="reply.jsp"/>
 </body>
 </html>
